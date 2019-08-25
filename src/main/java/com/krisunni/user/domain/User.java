@@ -12,7 +12,7 @@ import java.io.Serializable;
 public class User implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
     @NotNull

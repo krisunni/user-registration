@@ -30,6 +30,7 @@ import java.util.Optional;
 public class UserController {
 
     private final Logger log = LoggerFactory.getLogger(UserController.class);
+
     @Autowired
     private UserService userService;
 

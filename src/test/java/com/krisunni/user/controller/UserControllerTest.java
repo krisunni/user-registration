@@ -6,7 +6,6 @@ import com.krisunni.user.service.UserService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -33,6 +32,7 @@ import static com.krisunni.user.TestUtil.initialUser;
 import static com.krisunni.user.TestUtil.updatedUser;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -106,7 +106,7 @@ public class UserControllerTest {
     @Test
     public void deleteUser() throws Exception {
         intialUser.setId(1L);
-        Mockito.doNothing().when(userService).delete(1L);
+        doNothing().when(userService).delete(1L);
         this.mockMvc.perform(delete("/api/user/{id}",intialUser.getId())
                 .contentType(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(status().isNoContent());
