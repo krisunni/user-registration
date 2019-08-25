@@ -5,13 +5,22 @@ import com.krisunni.user.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -22,7 +31,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/users")
+    @PostMapping("/user")
     public ResponseEntity<User> createUser(@Valid @RequestBody User user) throws URISyntaxException {
         log.debug("Post Request to save User: {},", user);
         if (user.getId() != null) {
@@ -37,9 +46,9 @@ public class UserController {
                 .body(savedUser);
     }
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/user/{id}")
     public ResponseEntity<User> getBuser(@PathVariable Long id) throws URISyntaxException {
-        log.debug("REST request to get Buser : {}", id);
+        log.debug("REST request to get User : {}", id);
         Optional<User> user = userService.findOne(id);
 
         if (!user.isPresent()) {
@@ -47,5 +56,14 @@ public class UserController {
         }
         return ResponseEntity.created(new URI("/api/users/" + user.get().getId()))
                 .body(user.get());
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<List<User>> getAllUsers(@Valid Pageable pageable) {
+        log.debug("REST request to get Users with Pageable: {}", pageable.toString());
+        Page<User> page = userService.findAll(pageable);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Total-Count", Long.toString(page.getTotalElements()));
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 }

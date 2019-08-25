@@ -17,3 +17,12 @@ spring:
 server:
   port: 10344
   address: localhost
+#
+# Test Logging
+#
+logging:
+  level:
+    root: ERROR
+    com.krisunni.user: DEBUG
+    org.hibernate: DEBUG
+    org.springframework.web: DEBUG
