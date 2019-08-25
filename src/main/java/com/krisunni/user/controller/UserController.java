@@ -10,9 +10,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -65,5 +67,22 @@ public class UserController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-Total-Count", Long.toString(page.getTotalElements()));
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    @PutMapping("/user")
+    public ResponseEntity<User> updateUser(@Valid @RequestBody User user) throws URISyntaxException {
+        log.debug("Put Request to update User: {},", user);
+        if (user.getId() == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        User result = userService.save(user);
+        return ResponseEntity.ok().body(result);
+    }
+
+    @DeleteMapping("/user/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) throws URISyntaxException {
+        log.debug("Put Request to delete User ID: {},", id);
+        userService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -25,4 +25,4 @@ hs_err_pid*
 .idea/
 .exe
 mvnw
-mvnw.cmd
+*.cmd
