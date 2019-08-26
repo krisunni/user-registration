@@ -5,10 +5,11 @@ services:
     container_name: postgresql
     restart: always
     volumes:
-    - ~/volumes/jhipster/user/postgresql/:/var/lib/postgresql/data/
+      - ~/volumes/user/postgresql/:/var/lib/postgresql/data/
     environment:
     - POSTGRES_USER=${DB_USER}
     - POSTGRES_PASSWORD=${DB_PASSWORD}
+    - POSTGRES_DB=${DB_USER}
     ports:
     - 5432:5432
   user-service:
@@ -17,16 +18,19 @@ services:
     depends_on:
     - postgresql
     volumes:
-    - .target/${APP_JAR}:/usr/src/user.jar
+    - ../target/${APP_JAR}:/usr/src/user.jar
     working_dir: /usr/src
     command: bash -c "cd /usr/src && java -jar user.jar"
     stdin_open: true
     tty: true
+    links:
+    - postgresql
     ports:
-    - 8080:8080
+    - ${IP_ADDRESS}:8080:8080
     environment:
       - APP_JAR=${APP_JAR}
       - DB_URL=${DB_URL}
+      - SPRING_DATASOURCE_URL=${DB_URL}
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
       - SERVER_PORT=${SERVER_PORT}

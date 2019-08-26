@@ -14,9 +14,17 @@ spring:
     hikari:
       poolName: Hikari
       auto-commit: false
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    open-in-view: false
+    generate-ddl: false
+
 server:
   port: ${SERVER_PORT}
-
 logging:
   level:
     root: ${ROOT_DEBUG_LEVEL}
