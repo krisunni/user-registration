@@ -1,0 +1,28 @@
+# ===================================================================
+# Spring Boot configuration.
+#
+# This configuration is used for tests.
+#
+spring:
+  application:
+    name: user-service
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:h2:mem:user;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MULTI_THREADED=FALSE
+    name:
+    username:
+    password:
+    hikari:
+      auto-commit: false
+server:
+  port: 10344
+  address: localhost
+#
+# Test Logging
+#
+logging:
+  level:
+    root: ERROR
+    com.krisunni.user: DEBUG
+    org.hibernate: DEBUG
+    org.springframework.web: DEBUG

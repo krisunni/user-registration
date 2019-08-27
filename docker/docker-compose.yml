@@ -1,0 +1,45 @@
+version: '2'
+services:
+  postgresql:
+    image: postgres
+    container_name: postgresql
+    restart: always
+    volumes:
+      - ~/volumes/user/postgresql/:/var/lib/postgresql/data/
+    environment:
+    - POSTGRES_USER=${DB_USER}
+    - POSTGRES_PASSWORD=${DB_PASSWORD}
+    - POSTGRES_DB=${DB_USER}
+    ports:
+    - 5432:5432
+  user-service:
+    container_name: user-service
+    image: openjdk:8
+    depends_on:
+    - postgresql
+    volumes:
+    - ../target/${APP_JAR}:/usr/src/user.jar
+    working_dir: /usr/src
+    command: bash -c "cd /usr/src && java -jar user.jar"
+    stdin_open: true
+    tty: true
+    links:
+    - postgresql
+    ports:
+    - ${IP_ADDRESS}:${SERVER_PORT}:${SERVER_PORT}
+    environment:
+      - APP_JAR=${APP_JAR}
+      - DB_URL=${DB_URL}
+      - SPRING_DATASOURCE_URL=${DB_URL}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - SERVER_PORT=${SERVER_PORT}
+      - ROOT_DEBUG_LEVEL=${ROOT_DEBUG_LEVEL}
+      - PACKAGE_DEBUG_LEVEL=${PACKAGE_DEBUG_LEVEL}
+      - HIBERNATE_DEBUG_LEVEL=${HIBERNATE_DEBUG_LEVEL}
+      - WEB_DEBUG_LEVEL=${WEB_DEBUG_LEVEL}
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
+
+
+
+

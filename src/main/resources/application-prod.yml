@@ -1,0 +1,33 @@
+# ===================================================================
+# Spring Boot configuration.
+#
+# This configuration is for production
+#
+spring:
+  application:
+    name: user-service
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    hikari:
+      poolName: Hikari
+      auto-commit: false
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    open-in-view: false
+    generate-ddl: false
+
+server:
+  port: ${SERVER_PORT}
+logging:
+  level:
+    root: ${ROOT_DEBUG_LEVEL}
+    com.krisunni.user: ${PACKAGE_DEBUG_LEVEL}
+    org.hibernate: ${HIBERNATE_DEBUG_LEVEL}
+    org.springframework.web: ${WEB_DEBUG_LEVEL}
