@@ -29,6 +29,15 @@ DB_PASSWORD=user
 ```
 docker-compose up -d
 ```
+# Swagger URLs
+1. Swagger UI
+`http://[HOSTNAME]:[PORT]/swagger-ui.html`
+For local development
+`http://localhost:8080/swagger-ui.html`
+2 Swagger Specs
+`http://[HOSTNAME]:[PORT]/v2/api-docs?group=user-api`
+For local development
+`http://localhost:8080/v2/api-docs?group=user-api`
 
 [Maven]: https://maven.apache.org/
 [Docker]: https://www.docker.com/
