@@ -2,6 +2,8 @@ package com.krisunni.user.controller;
 
 import com.krisunni.user.TestUtil;
 import com.krisunni.user.domain.User;
+import com.krisunni.user.domain.dto.MultiUserRequest;
+import com.krisunni.user.repository.UserRepositoryCustom;
 import com.krisunni.user.service.UserService;
 import org.junit.Before;
 import org.junit.Test;
@@ -55,6 +57,10 @@ public class UserControllerTest {
     private MockMvc mockMvc;
     @MockBean
     private UserService userService;
+
+    @MockBean
+    private UserRepositoryCustom userRepositoryCustom;
+
     User intialUser;
 
     @Before
@@ -107,7 +113,7 @@ public class UserControllerTest {
     public void deleteUser() throws Exception {
         intialUser.setId(1L);
         doNothing().when(userService).delete(1L);
-        this.mockMvc.perform(delete("/api/user/{id}",intialUser.getId())
+        this.mockMvc.perform(delete("/api/user/{id}", intialUser.getId())
                 .contentType(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(status().isNoContent());
     }
@@ -131,6 +137,25 @@ public class UserControllerTest {
         when(userService.findAll(firstPageWithTwoElements)).thenReturn(pageOfUsers);
         this.mockMvc.perform(get("/api/user?page={page}&size={size}", 0, 1)
                 .contentType(TestUtil.APPLICATION_JSON_UTF8))
+                .andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.[*].id").value(hasItem(intialUser.getId().intValue())))
+                .andExpect(jsonPath("$.[*].firstName").value(hasItem(DEFAULT_FIRST_NAME)))
+                .andExpect(jsonPath("$.[*].lastName").value(DEFAULT_LAST_NAME))
+                .andExpect(jsonPath("$.[*].telephone").value(DEFAULT_TELEPHONE))
+                .andExpect(jsonPath("$.[*].email").value(DEFAULT_EMAIL));
+    }
+
+    @Test
+    public void multiuser() throws Exception {
+        intialUser.setId(1L);
+        List<User> users = new ArrayList<>();
+        users.add(intialUser);
+        MultiUserRequest multiUserRequest = TestUtil.getGenericMultiUser();
+
+        when(userService.getFilteredUser(multiUserRequest)).thenReturn(users);
+        this.mockMvc.perform(post("/api/multiuser")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(multiUserRequest)))
                 .andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$.[*].id").value(hasItem(intialUser.getId().intValue())))
                 .andExpect(jsonPath("$.[*].firstName").value(hasItem(DEFAULT_FIRST_NAME)))

@@ -3,9 +3,12 @@ package com.krisunni.user;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.krisunni.user.domain.User;
+import com.krisunni.user.domain.dto.MultiUserRequest;
 import org.springframework.http.MediaType;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Utility for testing REST controllers.
@@ -45,5 +48,16 @@ public final class TestUtil {
      */
     public static byte[] convertObjectToJsonBytes(Object object) throws IOException {
         return mapper.writeValueAsBytes(object);
+    }
+
+    public static MultiUserRequest getGenericMultiUser() {
+
+        MultiUserRequest multiUserRequest = new MultiUserRequest();
+        List<String> notNullColumns = new ArrayList<String>();
+        notNullColumns.add("email");
+        multiUserRequest.setColumns(notNullColumns);
+        multiUserRequest.setPage(0);
+        multiUserRequest.setSize(0);
+        return multiUserRequest;
     }
 }

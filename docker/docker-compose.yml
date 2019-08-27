@@ -26,7 +26,7 @@ services:
     links:
     - postgresql
     ports:
-    - ${IP_ADDRESS}:8080:8080
+    - ${IP_ADDRESS}:${SERVER_PORT}:${SERVER_PORT}
     environment:
       - APP_JAR=${APP_JAR}
       - DB_URL=${DB_URL}

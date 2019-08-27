@@ -2,7 +2,9 @@ package com.krisunni.user.service.impl;
 
 
 import com.krisunni.user.domain.User;
+import com.krisunni.user.domain.dto.MultiUserRequest;
 import com.krisunni.user.repository.UserRepository;
+import com.krisunni.user.repository.UserRepositoryCustom;
 import com.krisunni.user.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -24,6 +27,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private UserRepositoryCustom userRepositoryCustom;
 
     /**
      * Save a user.
@@ -74,5 +79,11 @@ public class UserServiceImpl implements UserService {
         log.debug("Request to delete User : {}", id);
         userRepository.deleteById(id);
 
+    }
+
+    @Override
+    public List<User> getFilteredUser(MultiUserRequest multiUserRequest) {
+        log.debug("Request to getFilteredUser Users : {}", multiUserRequest);
+        return userRepositoryCustom.findUserbyColumns(multiUserRequest);
     }
 }

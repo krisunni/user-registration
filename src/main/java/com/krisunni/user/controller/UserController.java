@@ -1,6 +1,7 @@
 package com.krisunni.user.controller;
 
 import com.krisunni.user.domain.User;
+import com.krisunni.user.domain.dto.MultiUserRequest;
 import com.krisunni.user.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,5 +86,12 @@ public class UserController {
         log.debug("Put Request to delete User ID: {},", id);
         userService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/multiuser")
+    public ResponseEntity<List<User>> getFilteredUser(@Valid @RequestBody MultiUserRequest multiUserRequest) throws URISyntaxException {
+        log.debug("Get Request for MultiUserRequest: {},", multiUserRequest);
+        List<User> result = userService.getFilteredUser(multiUserRequest);
+        return ResponseEntity.ok().body(result);
     }
 }

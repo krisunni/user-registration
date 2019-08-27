@@ -1,7 +1,10 @@
 package com.krisunni.user.service;
 
+import com.krisunni.user.TestUtil;
 import com.krisunni.user.domain.User;
+import com.krisunni.user.domain.dto.MultiUserRequest;
 import com.krisunni.user.repository.UserRepository;
+import com.krisunni.user.repository.UserRepositoryCustom;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,6 +35,8 @@ public class UserServiceImplTest {
     private UserService userService;
     @MockBean
     private UserRepository userRepository;
+    @MockBean
+    private UserRepositoryCustom userRepositoryCustom;
 
     User intialUser;
 
@@ -79,5 +84,15 @@ public class UserServiceImplTest {
         Optional<User> userFromFindOne = userService.findOne(1L);
         assertThat(userFromFindOne.isPresent());
         assertThat(userFromFindOne.get()).isEqualTo(intialUser);
+    }
+
+    @Test
+    public void findUserbyColumns() {
+        MultiUserRequest multiUserRequest = TestUtil.getGenericMultiUser();
+        List<User> users = new ArrayList<>();
+        users.add(intialUser);
+        when(userRepositoryCustom.findUserbyColumns(multiUserRequest)).thenReturn(users);
+        List<User> filteredUser = userService.getFilteredUser(multiUserRequest);
+        assertThat(filteredUser.size()).isEqualTo(1);
     }
 }
