@@ -34,7 +34,7 @@ docker-compose up -d
 `http://[HOSTNAME]:[PORT]/swagger-ui.html`
 For local development
 `http://localhost:8080/swagger-ui.html`
-2 Swagger Specs
+2. Swagger Specs
 `http://[HOSTNAME]:[PORT]/v2/api-docs?group=user-api`
 For local development
 `http://localhost:8080/v2/api-docs?group=user-api`
